@@ -89,17 +89,17 @@ HTML_TEMPLATE = '''
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://lilchatty.com/"> <!-- Update if hosted elsewhere -->
+    <meta property="og:url" content="{{ url_for('index', _external=True) }}"> <!-- Dynamic URL -->
     <meta property="og:title" content="Lil' Chatty - Local, Free ChatGPT Alternative">
     <meta property="og:description" content="Run your own private AI chat assistant locally!">
-    <meta property="og:image" content="{{ url_for('static', filename='images/lilchatty-og.png') }}">
+    <meta property="og:image" content="{{ url_for('static', filename='images/lilchatty-og.png', _external=True) }}">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://lilchatty.com/"> <!-- Update if hosted elsewhere -->
+    <meta property="twitter:url" content="{{ url_for('index', _external=True) }}"> <!-- Dynamic URL -->
     <meta property="twitter:title" content="Lil' Chatty - Local, Free ChatGPT Alternative">
     <meta property="twitter:description" content="Run your own private AI chat assistant locally!">
-    <meta property="twitter:image" content="{{ url_for('static', filename='images/lilchatty-og.png') }}">
+    <meta property="twitter:image" content="{{ url_for('static', filename='images/lilchatty-og.png', _external=True) }}">
 
     <style>
         body { 
