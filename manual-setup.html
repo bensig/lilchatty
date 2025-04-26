@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lil' Chatty - Manual Setup Steps</title>
+    <meta name="description" content="Manual copy-paste setup steps for Lil' Chatty (Open WebUI + Ollama) on MacOS.">
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="static/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="static/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="static/images/favicon-16x16.png">
+    <link rel="shortcut icon" href="static/images/favicon.ico">
+
+    <!-- Shared Styles - Consider moving to a shared CSS file later -->
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 800px; 
+            margin: 40px auto; 
+            padding: 20px;
+            background-color: #FFF9F3; /* Cream White */
+            color: #2E2E2E; /* Deep Charcoal */
+        }
+        .container { 
+            border: 1px solid #C4CDD5; /* Cool Gray */
+            border-radius: 8px; 
+            padding: 30px; 
+            margin-top: 30px; 
+            background-color: white; /* Slight contrast */
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .btn { 
+            background: #FF8B4D; /* Bright Orange */
+            color: white; 
+            padding: 8px 12px; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
+            font-size: 0.9em;
+            margin: 0 0 0 10px; /* Add left margin only */
+        }
+        .btn:hover, .btn:focus {
+            background-color: #ff7a3a; /* Slightly darker orange */
+            box-shadow: 0 0 0 3px rgba(255, 139, 77, 0.2); /* Highlight Glow */
+            outline: none;
+        }
+         .btn.copied {
+            background-color: #4DD9A3; /* Success color */
+        }
+        .step { margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px; }
+        .step:first-child { border-top: none; padding-top: 0; margin-top: 0;}
+        h1, h2, h3 { 
+            color: #3CB4AC; /* Teal Green */
+            font-weight: 600;
+        }
+        .logo-container { text-align: center; margin-bottom: 10px; }
+        .logo-container img { max-width: 200px; height: auto; }
+        pre { 
+            background: #f0f0f0; /* Light Gray */
+            padding: 15px; 
+            overflow-x: auto; 
+            border-radius: 6px; 
+            border: 1px solid #C4CDD5; /* Cool Gray */
+            color: #2E2E2E; /* Deep Charcoal */
+            font-family: monospace;
+            font-size: 0.9em;
+            margin: 0;
+            flex-grow: 1;
+        }
+        select {
+            padding: 10px;
+            font-size: 1em;
+            border-radius: 6px;
+            border: 1px solid #C4CDD5;
+            margin-bottom: 20px;
+        }
+        .command-block {
+            display: none; /* Hidden by default */
+        }
+        .command-block.visible {
+            display: block; /* Shown when selected */
+        }
+        .copy-container {
+            display: flex;
+            align-items: center; 
+            margin-top: 5px;
+            margin-bottom: 15px;
+            gap: 10px; 
+        }
+        .copy-container pre {
+             margin: 0; 
+        }
+        .copy-container .btn {
+            flex-shrink: 0; 
+            margin: 0;
+        }
+        .note { font-size: 0.9em; color: #6c757d; margin-top: 5px;}
+        a { color: #FF8B4D; }
+        a:hover { text-decoration: underline; }
+        .question-group {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            border: 1px solid #eee;
+        }
+        .question-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #3CB4AC;
+        }
+        .question-group div label {
+            font-weight: normal;
+            display: inline-block;
+            margin-right: 15px;
+            color: #2E2E2E;
+        }
+        .question-group input[type="radio"] {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+       <a href="/"><img src="static/images/lilchatty-logo.png" alt="Lil' Chatty Logo"></a>
+    </div>
+    <div class="container">
+        <h1>Manual Setup Steps (MacOS)</h1>
+        <p>If you prefer to run commands manually instead of using the setup wizard, follow these steps.</p>
+
+        <div class="question-group">
+            <label>Do you have Docker Desktop installed and running?</label>
+            <div>
+                <input type="radio" id="dockerYes" name="dockerStatus" value="yes"> <label for="dockerYes">Yes</label>
+                <input type="radio" id="dockerNo" name="dockerStatus" value="no"> <label for="dockerNo">No</label>
+            </div>
+        </div>
+
+        <div class="question-group" id="brewQuestion" style="display: none;">
+             <label>If no to Docker, do you have Homebrew installed?</label>
+             <div>
+                <input type="radio" id="brewYes" name="brewStatus" value="yes"> <label for="brewYes">Yes</label>
+                <input type="radio" id="brewNo" name="brewStatus" value="no"> <label for="brewNo">No</label>
+             </div>
+        </div>
+
+        <div class="question-group">
+            <label>Select your system RAM:</label>
+            <select id="ramSelect">
+                <option value="">-- Select RAM --</option>
+                <option value="8">Up to 8GB</option>
+                <option value="16">9GB - 16GB</option>
+                <option value="32">17GB - 32GB</option>
+                <option value="64">Over 32GB</option>
+            </select>
+        </div>
+
+        <div id="commandsPlaceholder" class="note">Please answer the questions above to see the tailored commands.</div>
+
+        <!-- Command blocks will be populated here by JS -->
+        <div id="commandSequence" style="display: none;">
+
+             <div class="step" id="stepBrewInstall" style="display: none;">
+                <h3 id="titleBrewInstall"></h3>
+                <div class="copy-container">
+                    <pre id="brewCmd">/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</pre>
+                    <button class="btn" onclick="copyToClipboard(document.getElementById('brewCmd').innerText, this)">Copy</button>
+                </div>
+            </div>
+
+            <div class="step" id="stepColimaCombined" style="display: none;">
+                 <h3 id="titleColimaCombined"></h3>
+                 <div class="copy-container">
+                    <pre id="colimaCombinedCmd">brew install colima && colima start</pre>
+                    <button class="btn" onclick="copyToClipboard(document.getElementById('colimaCombinedCmd').innerText, this)">Copy</button>
+                </div>
+                 <p class="note">Wait for Colima to start fully before proceeding.</p>
+            </div>
+            
+            <div class="step" id="stepDockerRun">
+                <h3 id="titleDockerRun"></h3>
+                <p class="note">This uses the Docker image with Ollama bundled inside.</p>
+                <div class="copy-container">
+                    <pre id="dockerCmd"></pre>
+                    <button class="btn" onclick="copyToClipboard(document.getElementById('dockerCmd').innerText, this)">Copy</button>
+                </div>
+                 <p class="note">After running, access the UI at <a href="http://localhost:3000" target="_blank">http://localhost:3000</a>.</p>
+            </div>
+
+            <div class="step" id="stepOllamaPull">
+                 <h3 id="titleOllamaPull"></h3>
+                 <p class="note">Run this command *after* the Docker container is running.</p>
+                <div class="copy-container">
+                    <pre id="ollamaCmd"></pre>
+                    <button class="btn" onclick="copyToClipboard(document.getElementById('ollamaCmd').innerText, this)">Copy</button>
+                </div>
+                 <p class="note">Go to settings via this link: <a href="http://localhost:3000/admin/settings" target="_blank">http://localhost:3000/admin/settings</a>.</p>
+                 <p class="note">Click <strong>Models</strong> in the middle/sidebar. Then, near the top right (possibly next to "Manage Models"), click the <strong>Download icon</strong> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width: 1em; height: 1em; vertical-align: text-bottom; display: inline-block;"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"></path></svg>. Select the model after download is complete.</p>
+            </div>
+            
+        </div>
+
+    </div>
+
+    <script>
+        function copyToClipboard(text, buttonElement) {
+            navigator.clipboard.writeText(text).then(function() {
+                const originalText = buttonElement.innerText;
+                buttonElement.classList.add('copied');
+                buttonElement.innerText = 'Copied!';
+                setTimeout(() => {
+                    buttonElement.innerText = originalText;
+                    buttonElement.classList.remove('copied');
+                }, 1500); 
+            }, function(err) {
+                console.error('Could not copy text: ', err);
+                alert('Failed to copy text.');
+            });
+        }
+
+        const ramSelect = document.getElementById('ramSelect');
+        const commandsPlaceholder = document.getElementById('commandsPlaceholder');
+        const commandSequence = document.getElementById('commandSequence');
+        const dockerCmdPre = document.getElementById('dockerCmd');
+        const ollamaCmdPre = document.getElementById('ollamaCmd');
+        
+        // New elements for questions
+        const dockerStatusRadios = document.querySelectorAll('input[name="dockerStatus"]');
+        const brewStatusRadios = document.querySelectorAll('input[name="brewStatus"]');
+        const brewQuestionDiv = document.getElementById('brewQuestion');
+
+        // Command step divs
+        const stepBrewInstall = document.getElementById('stepBrewInstall');
+        const stepColimaCombined = document.getElementById('stepColimaCombined');
+        const stepDockerRun = document.getElementById('stepDockerRun');
+        const stepOllamaPull = document.getElementById('stepOllamaPull');
+
+        function getSelectedRadioValue(radios) {
+            for (const radio of radios) {
+                if (radio.checked) {
+                    return radio.value;
+                }
+            }
+            return null; // No radio selected
+        }
+
+        function updateCommandsVisibility() {
+            const dockerStatus = getSelectedRadioValue(dockerStatusRadios);
+            const brewStatus = getSelectedRadioValue(brewStatusRadios);
+            const selectedRam = ramSelect.value;
+            let modelName = "";
+            let currentStep = 1;
+
+            // Show/hide brew question based on docker status
+            brewQuestionDiv.style.display = (dockerStatus === 'no') ? 'block' : 'none';
+
+            // --- Determine if all required inputs are selected ---
+            let allInputsSelected = false;
+            if (dockerStatus === 'yes' && selectedRam) {
+                allInputsSelected = true;
+            } else if (dockerStatus === 'no' && brewStatus && selectedRam) {
+                allInputsSelected = true;
+            }
+            
+            // --- Hide all steps initially if not ready ---
+            const allSteps = [stepBrewInstall, stepColimaCombined, stepDockerRun, stepOllamaPull];
+            allSteps.forEach(step => step.style.display = 'none');
+
+            if (!allInputsSelected) {
+                commandsPlaceholder.style.display = 'block';
+                commandSequence.style.display = 'none';
+                return;
+            }
+            
+            commandsPlaceholder.style.display = 'none';
+            commandSequence.style.display = 'block';
+
+            // --- Determine model based on RAM ---
+            if (selectedRam <= 8) {
+                modelName = "deepseek-r1:1.5b"; 
+            } else if (selectedRam <= 16) {
+                modelName = "deepseek-r1:7b";  
+            } else if (selectedRam <= 32) {
+                modelName = "deepseek-r1:14b"; 
+            } else { // 64 (Over 32GB)
+                modelName = "deepseek-r1:32b";
+            }
+            
+            // --- Dynamically show and number steps ---
+            
+            // Step: Install Brew (only if Docker=No and Brew=No)
+            if (dockerStatus === 'no' && brewStatus === 'no') {
+                document.getElementById('titleBrewInstall').innerText = `Step ${currentStep}: Install Homebrew`;
+                stepBrewInstall.style.display = 'block';
+                currentStep++;
+            }
+
+            // Step: Install & Start Colima (only if Docker=No)
+            if (dockerStatus === 'no') {
+                document.getElementById('titleColimaCombined').innerText = `Step ${currentStep}: Install & Start Colima`;
+                stepColimaCombined.style.display = 'block';
+                currentStep++;
+            }
+
+            // Step: Run Docker Command (Always shown if inputs complete)
+            document.getElementById('titleDockerRun').innerText = `Step ${currentStep}: Run Open WebUI (Lil' Chatty)`;
+            const dockerCommand = `docker run -d -p 3000:8080 -v ollama:/root/.ollama -v open-webui:/app/backend/data --name lilchatty --restart always ghcr.io/open-webui/open-webui:ollama`;
+            dockerCmdPre.innerText = dockerCommand;
+            stepDockerRun.style.display = 'block';
+            currentStep++;
+
+            // Step: Pull Model (Always shown if inputs complete)
+            document.getElementById('titleOllamaPull').innerText = `Step ${currentStep}: Pull Recommended Model`;
+            const ollamaCommand = `docker exec lilchatty ollama pull ${modelName}`;
+            ollamaCmdPre.innerText = ollamaCommand;
+            stepOllamaPull.style.display = 'block';
+            
+        }
+
+        // --- Add Event Listeners ---
+        ramSelect.addEventListener('change', updateCommandsVisibility);
+        dockerStatusRadios.forEach(radio => radio.addEventListener('change', updateCommandsVisibility));
+        brewStatusRadios.forEach(radio => radio.addEventListener('change', updateCommandsVisibility));
+        
+        // Initial call in case of browser auto-fill (though less likely with radios)
+        // updateCommandsVisibility(); 
+    </script>
+</body>
+</html> 

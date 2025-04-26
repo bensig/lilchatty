@@ -5,7 +5,7 @@ import time
 import webbrowser
 import threading
 import socket
-from flask import Flask, render_template_string, request, redirect, url_for, jsonify
+from flask import Flask, render_template_string, request, redirect, url_for, jsonify, render_template
 
 app = Flask(__name__)
 
