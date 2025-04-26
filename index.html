@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lil' Chatty - Easy Local AI Setup</title>
+    <meta name="description" content="Get started with Lil' Chatty, your friendly local AI assistant. Easy one-line setup for MacOS.">
+
+    <!-- Favicons (assuming they are in the deployed root or /images/) -->
+    <link rel="apple-touch-icon" sizes="180x180" href="static/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="static/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="static/images/favicon-16x16.png">
+    <link rel="shortcut icon" href="static/images/favicon.ico">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://lilchatty.com/"> <!-- Update if hosted elsewhere -->
+    <meta property="og:title" content="Lil' Chatty - Easy Local AI Setup">
+    <meta property="og:description" content="Run your own private AI chat assistant locally! Quick setup via terminal.">
+    <meta property="og:image" content="static/images/lilchatty-og.png"> <!-- Adjust path if needed for deployment -->
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://lilchatty.com/"> <!-- Update if hosted elsewhere -->
+    <meta property="twitter:title" content="Lil' Chatty - Easy Local AI Setup">
+    <meta property="twitter:description" content="Run your own private AI chat assistant locally! Quick setup via terminal.">
+    <meta property="twitter:image" content="static/images/lilchatty-og.png"> <!-- Adjust path if needed for deployment -->
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #FFF9F3; /* Cream White */
+            color: #2E2E2E; /* Deep Charcoal */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+        .content {
+            max-width: 650px;
+            padding: 40px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        .logo img {
+            max-width: 180px;
+            margin-bottom: 15px;
+        }
+        h1 {
+            color: #3CB4AC; /* Teal Green */
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+            font-weight: 600;
+        }
+        .tagline {
+            color: #6c757d;
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+        p {
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        pre {
+            background: #f0f0f0; /* Light Gray */
+            padding: 20px;
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid #C4CDD5; /* Cool Gray */
+            color: #2E2E2E; /* Deep Charcoal */
+            font-family: monospace;
+            font-size: 1em;
+            text-align: left;
+            cursor: text;
+            margin-top: 10px;
+            margin-bottom: 25px;
+            white-space: pre-wrap;       /* CSS 3 */
+            white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+            white-space: -pre-wrap;      /* Opera 4-6 */
+            white-space: -o-pre-wrap;    /* Opera 7 */
+            word-wrap: break-word;       /* Internet Explorer 5.5+ */
+        }
+        .btn {
+            display: inline-block;
+            background: #FF8B4D; /* Bright Orange */
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
+            margin-top: 10px;
+        }
+        .btn:hover, .btn:focus {
+            background-color: #ff7a3a; /* Slightly darker orange */
+            box-shadow: 0 0 0 3px rgba(255, 139, 77, 0.2); /* Highlight Glow */
+            outline: none;
+        }
+        .requirements {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-top: 30px;
+        }
+        a { color: #FF8B4D; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .signup-section {
+            margin-top: 40px;
+            padding: 25px;
+            background-color: #e0f2f1; /* Lighter Teal */
+            border-radius: 8px;
+            border: 1px solid #3CB4AC; /* Teal Green */
+        }
+        .signup-section h3 {
+            color: #3CB4AC; /* Teal Green */
+            margin-top: 0;
+        }
+        .signup-btn {
+             background-color: #3CB4AC; /* Teal Green for this button */
+        }
+        .signup-btn:hover, .signup-btn:focus {
+            background-color: #2c9a93; /* Darker Teal */
+            box-shadow: 0 0 0 3px rgba(60, 180, 172, 0.3); /* Teal Glow */
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <div class="logo">
+            <img src="static/images/lilchatty-logo.png" alt="Lil' Chatty Logo">
+        </div>
+        <h1>Welcome to Lil' Chatty Setup!</h1>
+        <p class="tagline">Your friendly, local AI assistant setup.</p>
+
+        <p>Get started with your own private ChatGPT-like experience running right on your computer. Lil' Chatty helps you set up Open WebUI easily.</p>
+
+        <h2>Quick Start (MacOS)</h2>
+        <p>Open your Terminal app and paste the following command:</p>
+        <pre><code>curl -fsSL https://raw.githubusercontent.com/bensig/lilchatty/main/install.sh | bash</code></pre>
+
+        <p>This command downloads and runs the setup wizard, which will guide you through the rest of the process in your web browser.</p>
+
+        <a href="https://github.com/bensig/lilchatty" class="btn" target="_blank">View on GitHub</a>
+
+        <div class="signup-section">
+            <h3>📱 Mobile App Coming Soon!</h3>
+            <p>Want to be notified when the Lil' Chatty mobile app is ready? Click below to send us a quick email!</p>
+            <a href="mailto:heya@lilchatty.com?subject=lilchatty%20-%20updates%20pls&body=thx" class="btn signup-btn">Keep Me Updated!</a>
+        </div>
+
+        <p class="requirements">
+            <strong>Prerequisites:</strong> MacOS with <a href="https://www.docker.com/products/docker-desktop/" target="_blank">Docker Desktop</a> running OR <a href="https://brew.sh/" target="_blank">Homebrew</a> installed.
+        </p>
+    </div>
+</body>
+</html> 
