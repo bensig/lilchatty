@@ -44,17 +44,24 @@ if [ -d "${TMP_DIR}" ]; then
 fi
 git clone --depth 1 "${REPO_URL}" "${TMP_DIR}"
 
+echo "Current directory before cd: $(pwd)"
+
 # Navigate into the temporary directory
 cd "${TMP_DIR}"
+
+echo "Current directory after cd: $(pwd)"
+echo "Listing contents of ${TMP_DIR}:"
+ls -l
 
 # --- Install Dependencies ---
 echo "Installing dependencies (Flask)..."
 python3 -m pip install -r requirements.txt
 
 # --- Run App ---
+echo "Current directory before running python: $(pwd)"
 echo "Running setup wizard (app.py)..."
 echo "(You can close the wizard by stopping this script with Ctrl+C)"
-python3 app.py # app.py can now find ./static/
+python3 app.py # app.py should now find ./static/
 
 # --- Cleanup --- 
 # Navigate back out of the temporary directory
