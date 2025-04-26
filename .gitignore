@@ -140,3 +140,5 @@ Thumbs.db
 .vscode/
 
 # Add any other customizations or additional rules here 
+# Local Netlify folder
+.netlify
