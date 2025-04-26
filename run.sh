@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# Script to download and run the Lil' Chatty setup wizard
+# Script to download necessary files into a temporary directory
+# and run the Lil' Chatty setup wizard (a local web app).
 
 set -e # Exit immediately if a command exits with a non-zero status.
 
@@ -10,7 +11,8 @@ REPO_URL="https://github.com/bensig/lilchatty.git"
 HOME_DIR=$(eval echo ~)
 TMP_DIR="${HOME_DIR}/Downloads/lilchatty_setup_temp"
 
-echo "🚀 Starting Lil' Chatty Setup..."
+echo "🚀 Preparing Lil' Chatty Setup Wizard..."
+echo "   (This will download files to a temporary directory: ${TMP_DIR})"
 
 # --- Prerequisite Check ---
 echo "Checking prerequisites..."

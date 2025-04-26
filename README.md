@@ -13,14 +13,14 @@ Make sure you have [Docker Desktop](https://www.docker.com/products/docker-deskt
 Open your terminal and run this single command:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/bensig/lilchatty/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/bensig/lilchatty/main/run.sh | bash
 ```
 
-This will download and run the installation script, which will:
+This will download and run the setup script, which will:
 
 0.  Check if you have Python 3 and pip installed.
 1.  Install the required `Flask` dependency.
-2.  Run the Python setup wizard (`app.py`).
+2.  Run the Python setup wizard (`app.py`) - a temporary local web app.
 
 This will guide you through:
 
