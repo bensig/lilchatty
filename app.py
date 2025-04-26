@@ -212,6 +212,32 @@ HTML_TEMPLATE = '''
         ol ol { margin-top: 5px; }
         strong { font-weight: 600; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .copy-container {
+            display: flex;
+            align-items: center; /* Vertically align items in the center */
+            margin-top: 10px;
+            margin-bottom: 10px;
+            gap: 10px; /* Add space between pre/code and button */
+        }
+        .copy-container pre, .copy-container code {
+            flex-grow: 1; /* Allow text block to take available space */
+            margin: 0; /* Remove default margins */
+        }
+        .copy-container .copy-btn {
+            flex-shrink: 0; /* Prevent button from shrinking */
+            padding: 8px 12px; /* Adjust padding */
+            font-size: 0.9em;
+            margin: 0; /* Remove default margins */
+        }
+        .code-box {
+             background: #f0f0f0; 
+             padding: 8px 12px; 
+             border-radius: 4px; 
+             border: 1px solid #C4CDD5; 
+             display: inline-block; /* Or block if needed */
+        }
+
+        /* Responsive adjustments */
     </style>
     <script>
         function checkPrerequisites() {
@@ -230,6 +256,20 @@ HTML_TEMPLATE = '''
                         document.getElementById('setupForm').style.display = 'block';
                     }
                 });
+        }
+
+        // Simple copy-to-clipboard function
+        function copyToClipboard(text, buttonElement) {
+            navigator.clipboard.writeText(text).then(function() {
+                const originalText = buttonElement.innerText;
+                buttonElement.innerText = 'Copied!';
+                setTimeout(() => {
+                    buttonElement.innerText = originalText;
+                }, 1500); // Reset text after 1.5 seconds
+            }, function(err) {
+                console.error('Could not copy text: ', err);
+                alert('Failed to copy text.');
+            });
         }
     </script>
 </head>
@@ -273,67 +313,75 @@ HTML_TEMPLATE = '''
     
     {% elif step == 'results' %}
     <div class="container">
-        <h2>Your Little Chatty Setup</h2>
+        <h2>Your Lil' Chatty Setup</h2>
         
-        <div class="recommendation">
-            <h3>Recommended AI Models for {{ ram_gb }}GB RAM:</h3>
-            <p style="font-size: 0.9em; font-style: italic; margin-top: -10px; margin-bottom: 15px;">
-                ℹ️ Note: You will need to choose and download one of these models from the web interface in a few minutes, after the base software starts.
-            </p>
-            <ul>
-                {% for model in recommended_models %}
-                <li>{{ model }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        
+        <p>Follow these steps to get Lil' Chatty running:</p>
+
         <div class="step">
-            <h3>Easy Setup Instructions:</h3>
-            <ol>
-                <li>
-                    <strong>Copy and paste this command in your terminal:</strong>
-                    <pre>{{ docker_command }}</pre>
-                </li>
-                <li><strong>When it completes, open <a href="http://localhost:3000" target="_blank">http://localhost:3000</a> in your browser</strong></li>
-                
-                {% if deployment == 'local' %}
-                <li>
-                    <strong>From the models page, download one of the recommended models</strong>
-                </li>
-                {% endif %}
-                
-                {% if deployment == 'cloud' %}
-                <li>
-                    <strong>Connect to OpenAI API (Optional):</strong>
-                    <p>If you plan to use OpenAI models (like GPT-4) via this interface:</p>
-                    <ol style="margin-top: 5px; padding-left: 20px;">
-                        <li>Go to <a href="https://platform.openai.com/api-keys" target="_blank">OpenAI API Keys</a> page and log in or sign up.</li>
-                        <li>Click "+ Create new secret key". Copy your new <strong>API key</strong>.</li>
-                        <li>Once Little Chatty is running at <a href="http://localhost:3000" target="_blank">http://localhost:3000</a>, navigate to <strong>Settings > Connections</strong> (or similar section).</li>
-                        <li>Paste your API key into the "OpenAI API Key" field and save.</li>
-                    </ol>
-                    <p style="font-size: 0.9em; margin-top: 5px;"><i>Note: Using OpenAI models may incur costs based on your usage.</i></p>
-                </li>
-                {% endif %}
-                
-                {% if search == 'yes' %}
-                <li>
-                    <strong>Configure Web Search (Optional):</strong>
-                    <p>To enable internet search within Little Chatty, you need a Google Programmable Search Engine (PSE) API Key and Engine ID.</p>
-                    <ol style="margin-top: 5px; padding-left: 20px;">
-                        <li>Go to the <a href="https://programmablesearchengine.google.com/" target="_blank">Google Programmable Search Engine</a> page and create a new search engine. Configure it to search the entire web. Note your <strong>Search engine ID</strong>.</li>
-                        <li>Go to the <a href="https://console.cloud.google.com/apis/library/customsearch.googleapis.com" target="_blank">Google Cloud Console Custom Search API page</a>.</li>
-                        <li>Create a new project or select an existing one. Enable the "Custom Search API".</li>
-                        <li>Go to "Credentials", click "+ CREATE CREDENTIALS", choose "API key". Copy your new <strong>API key</strong>. (You may want to restrict this key later for security).</li>
-                        <li>Once Little Chatty is running at <a href="http://localhost:3000" target="_blank">http://localhost:3000</a>, navigate to <strong>Settings > RAG > Web Search</strong>.</li>
-                        <li>Select "Google PSE" as the engine, paste your API Key into "Google PSE API Key", and your Engine ID into "Google PSE ID". Save the changes.</li>
-                    </ol>
-                </li>
-                {% endif %}
+            <h3>1. Run the Setup Command</h3>
+            <p>Copy and paste this command into your terminal:</p>
+            <div class="copy-container">
+                <pre id="dockerCommand">{{ docker_command }}</pre>
+                <button 
+                    class="btn copy-btn" 
+                    onclick="copyToClipboard(document.getElementById('dockerCommand').innerText, this)"
+                >Copy</button>
+            </div>
+            <p style="font-size: 0.9em;"><i>This starts the Open WebUI software in the background using Docker.</i></p>
+        </div>
+
+        <div class="step">
+            <h3>2. Access the Web Interface</h3>
+            <p>Wait a few moments for it to start, then open <a href="http://localhost:3000" target="_blank">http://localhost:3000</a> in your browser.</p>
+        </div>
+
+        {% if deployment == 'local' %}
+        <div class="step">
+            <h3>3. Download the Recommended AI Model</h3>
+            <p>Go to settings via this link: <a href="http://localhost:3000/admin/settings" target="_blank">http://localhost:3000/admin/settings</a>.</p>
+            <p>Click <strong>Models</strong> in the middle/sidebar. Then, near the top right (possibly next to "Manage Models"), click the <strong>Download icon</strong> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width: 1em; height: 1em; vertical-align: text-bottom; display: inline-block;"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"></path></svg>.</p>
+            <p>Paste the model name below into the field that appears, then click the download button:</p>
+             <div class="copy-container">
+                <code id="modelName" class="code-box">{{ recommended_model }}</code>
+                <button 
+                    class="btn copy-btn" 
+                    onclick="copyToClipboard(document.getElementById('modelName').innerText, this)"
+                >Copy</button>
+            </div>
+            <p>Click the download button and wait for it to complete. Then, select the model from the main chat screen.</p>
+             <p style="font-size: 0.9em;"><i>Based on your {{ ram_gb }}GB RAM, we recommend this model for a good balance of performance and capability.</i></p>
+             <p style="font-size: 0.9em;"><i>Many other models are available! Explore more at <a href="https://ollama.com/search" target="_blank">Ollama.com Models</a>.</i></p>
+        </div>
+        {% endif %}
+        
+        {% if deployment == 'cloud' %}
+        <div class="step">
+             <h3>3. Connect External APIs (Optional)</h3>
+             <p>If you plan to use external services like OpenAI:</p>
+             <ol style="margin-top: 5px; padding-left: 20px;">
+                <li>Go to <a href="https://platform.openai.com/api-keys" target="_blank">OpenAI API Keys</a> page and log in or sign up.</li>
+                <li>Click "+ Create new secret key". Copy your new <strong>API key</strong>.</li>
+                <li>Once Little Chatty is running at <a href="http://localhost:3000" target="_blank">http://localhost:3000</a>, navigate to <strong>Settings > Connections</strong> (or similar section).</li>
+                <li>Paste your API key into the "OpenAI API Key" field and save.</li>
+             </ol>
+             <p style="font-size: 0.9em; margin-top: 5px;"><i>Note: Using OpenAI models may incur costs based on your usage.</i></p>
+        </div>
+        {% endif %}
+        
+        {% if search == 'yes' %}
+        <div class="step">
+            <h3>4. Configure Web Search (Optional):</h3>
+            <p>To enable internet search within Little Chatty, you need a Google Programmable Search Engine (PSE) API Key and Engine ID.</p>
+            <ol style="margin-top: 5px; padding-left: 20px;">
+                <li>Go to the <a href="https://programmablesearchengine.google.com/" target="_blank">Google Programmable Search Engine</a> page and create a new search engine. Configure it to search the entire web. Note your <strong>Search engine ID</strong>.</li>
+                <li>Go to the <a href="https://console.cloud.google.com/apis/library/customsearch.googleapis.com" target="_blank">Google Cloud Console Custom Search API page</a>.</li>
+                <li>Create a new project or select an existing one. Enable the "Custom Search API".</li>
+                <li>Go to "Credentials", click "+ CREATE CREDENTIALS", choose "API key". Copy your new <strong>API key</strong>. (You may want to restrict this key later for security).</li>
+                <li>Once Little Chatty is running at <a href="http://localhost:3000" target="_blank">http://localhost:3000</a>, navigate to <strong>Settings > RAG > Web Search</strong>.</li>
+                <li>Select "Google PSE" as the engine, paste your API Key into "Google PSE API Key", and your Engine ID into "Google PSE ID". Save the changes.</li>
             </ol>
         </div>
-        
-        <a href="/" class="btn">← Start Over</a>
+        {% endif %}
     </div>
     {% endif %}
 </body>
@@ -384,15 +432,16 @@ def setup():
     search = request.form.get('search')
     ram_gb = round(get_system_memory_gb())
     
-    # Determine recommended models based on RAM
+    # Determine ONE recommended deepseek-r1 model based on RAM
+    # Using the base tags as requested.
     if ram_gb <= 8:
-        recommended_models = ["llama3:8b-instruct-q4_K_M", "mistral:7b-instruct-q4_K_M", "gemma:7b-instruct-q4_K_M"] # Smaller, faster models
+        recommended_model = "deepseek-r1:1.5b" 
     elif ram_gb <= 16:
-        recommended_models = ["llama3:8b-instruct-q5_K_M", "mistral:7b-instruct-q5_K_M", "gemma:7b-instruct-q5_K_M"]
+        recommended_model = "deepseek-r1:7b"  
     elif ram_gb <= 32:
-        recommended_models = ["llama3:70b-instruct-q4_K_M", "mixtral:8x7b-instruct-v0.1-q4_K_M", "command-r:35b-v0.1-q4_K_M"]
+         recommended_model = "deepseek-r1:14b" 
     else: # 32GB+
-        recommended_models = ["llama3:70b-instruct-q5_K_M", "mixtral:8x7b-instruct-v0.1-q5_K_M", "command-r-plus:104b-q4_K_M"]
+        recommended_model = "deepseek-r1:32b"
 
     # Construct Docker command based on docs (using ghcr.io)
     if deployment == 'local':
@@ -407,7 +456,7 @@ def setup():
         ram_gb=ram_gb,
         deployment=deployment,
         search=search,
-        recommended_models=recommended_models,
+        recommended_model=recommended_model,
         docker_command=docker_command
     )
 
