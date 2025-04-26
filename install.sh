@@ -5,7 +5,10 @@
 set -e # Exit immediately if a command exits with a non-zero status.
 
 REPO_URL="https://github.com/bensig/lilchatty.git"
-TMP_DIR="lilchatty_setup_temp"
+# Use a predictable directory in Downloads
+# Expand ~ to the full home directory path
+HOME_DIR=$(eval echo ~)
+TMP_DIR="${HOME_DIR}/Downloads/lilchatty_setup_temp"
 
 echo "🚀 Starting Lil' Chatty Setup..."
 
@@ -36,22 +39,28 @@ fi
 echo "✅ Prerequisites met (Python 3, pip, Git found)."
 
 # --- Clone Repository --- 
-echo "Cloning setup repository into temporary directory (${TMP_DIR})..."
+echo "Creating/cleaning setup directory (${TMP_DIR})..."
+
+# Ensure Downloads directory exists (though it usually does)
+mkdir -p "${HOME_DIR}/Downloads"
+
 # Remove temporary directory if it already exists
 if [ -d "${TMP_DIR}" ]; then
-    echo "Removing existing temporary directory..."
+    echo "Removing existing setup directory..."
     rm -rf "${TMP_DIR}"
 fi
+
+echo "Cloning setup repository into ${TMP_DIR}..."
 git clone --depth 1 "${REPO_URL}" "${TMP_DIR}"
 
 echo "Current directory before cd: $(pwd)"
 
-# Navigate into the temporary directory
+# Navigate into the setup directory
 cd "${TMP_DIR}"
 
 echo "Current directory after cd: $(pwd)"
 echo "Listing contents of ${TMP_DIR}:"
-ls -l
+ls -lA # Use -A to show hidden files like .git
 
 # --- Install Dependencies ---
 echo "Installing dependencies (Flask)..."
@@ -64,9 +73,9 @@ echo "(You can close the wizard by stopping this script with Ctrl+C)"
 python3 app.py # app.py should now find ./static/
 
 # --- Cleanup --- 
-# Navigate back out of the temporary directory
-cd ..
-echo "Cleaning up temporary setup directory (${TMP_DIR})..."
+# Navigate back out of the setup directory
+cd "${HOME_DIR}/Downloads" # Go back to Downloads before removing
+echo "Cleaning up setup directory (${TMP_DIR})..."
 rm -rf "${TMP_DIR}"
 
 echo "✨ Lil' Chatty setup wizard finished or was closed." 
