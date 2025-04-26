@@ -30,6 +30,30 @@ This will guide you through:
 4.  **Results:** Provides the appropriate `docker run` command based on your choices and recommends AI models based on your system RAM.
 5.  **Instructions:** Guides you on running the Docker command and accessing Open WebUI at `http://localhost:3000`.
 
+## Alternative Setup: Docker Compose (for advanced users)
+
+If you prefer using Docker Compose, a `docker-compose.yml` file is included in the repository. It provides profiles for different setups:
+
+*   **Run with bundled Ollama (Local Profile):**
+    ```bash
+    # Clone the repository first if you haven't already
+    # git clone https://github.com/bensig/lilchatty.git
+    # cd lilchatty
+
+    docker compose --profile local up -d
+    ```
+*   **Run Web UI only (Cloud/Default Profile - configure external connections later):**
+    ```bash
+    # Clone the repository first if you haven't already
+    # git clone https://github.com/bensig/lilchatty.git
+    # cd lilchatty
+
+    docker compose up -d
+    # or explicitly: docker compose --profile cloud up -d
+    ```
+
+This method requires you to clone the repository manually first, unlike the one-line setup script.
+
 ## Features
 
 *   Simple, interactive setup wizard run from the terminal.

@@ -1,0 +1,52 @@
+version: '3.8'
+
+# Docker Compose file for Lil' Chatty (Open WebUI)
+# Provides profiles for running locally with bundled Ollama or connecting to external services.
+
+# --- How to Use ---
+# Run with bundled Ollama (Local Profile):
+#   docker compose --profile local up -d
+#
+# Run Web UI only (Cloud/Default Profile - configure external connections later):
+#   docker compose up -d  OR  docker compose --profile cloud up -d 
+
+services:
+  open-webui:
+    container_name: lilchatty # Consistent name with the script
+    ports:
+      - "3000:8080"
+    volumes:
+      - open-webui:/app/backend/data
+    restart: always
+    profiles:
+      - cloud # Default profile: Runs base image, expects external connections
+      - local # Profile for local Ollama: Runs bundled image with volume
+    # --- Profile-specific configuration ---
+    # Configuration for the 'cloud' (default) profile
+    image: ghcr.io/open-webui/open-webui:main
+
+  # Configuration for the 'local' profile (overrides the default image and adds ollama volume)
+  open-webui-local:
+    <<: *open-webui-base # Inherit base configuration
+    image: ghcr.io/open-webui/open-webui:ollama
+    volumes:
+      - open-webui:/app/backend/data # Inherited volume
+      - ollama:/root/.ollama # Add ollama volume for local profile
+    profiles:
+      - local
+
+# Define base configuration using YAML anchors (optional, for clarity)
+x-open-webui-base: &open-webui-base
+  container_name: lilchatty
+  ports:
+    - "3000:8080"
+  volumes:
+    - open-webui:/app/backend/data
+  restart: always
+
+volumes:
+  open-webui:
+    name: open-webui
+  ollama:
+    name: ollama
+
